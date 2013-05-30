@@ -1,0 +1,17 @@
+[user]
+	name = Edgar Rodriguez
+	email = edgar@clarkparsia.com
+[core]
+	editor = vim
+[color]
+	ui = true
+[push]
+	default = simple
+[alias]
+	ci = commit
+	co = checkout
+	st = status
+	logg = log --graph
+	diffs = diff --stat
+	diffc = diff --cached
+	diffcs = diff --cached --stat
