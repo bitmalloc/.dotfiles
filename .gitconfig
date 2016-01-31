@@ -1,17 +1,108 @@
 [user]
-	name = Edgar Rodriguez
-	email = edgar@clarkparsia.com
+	name = Edgar Rodriguez-Diaz
+    email = edgar@rodr.io
+[alias]
+    co = checkout
+    ci = commit
+    br = branch
+    cob = checkout -bj
+    cm = !git add -A && git commit -m
+    save = !git add -A && git commit -m 'SAVEPOINT'
+    wip = commit -am "WIP"
+    ec = config --global -e
+    st = status
+    undo = reset HEAD~1 --mixed
+    amend = commit -a --amend
+	hist = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
+	type = cat-file -t
+	dump = cat-file -p
+	diffs = diff --stat-graph-width=50
+
+	wip = commit -am "WIP"
+	amend = commit -a --amend
+
+	# list all branches by order of last commit
+	branches = "for-each-ref --sort=-committerdate refs/heads/ --format='%(committerdate:short) %(authorname) %(refname:short)'"
+
+	# list all changes on your branch but not in develop
+	local = "!f() { git cherry -v develop `git rev-parse --abbrev-ref HEAD`; }; f"
+
+	# start over!
+	wipe = reset --hard HEAD
+
+	# start over from the origin of the branch.  WARNING:  deletes local commits
+	kill = "!f() { git reset --hard `git rev-parse --symbolic-full-name --abbrev-ref @{u}`; }; f"
+
+	# basic rebase
+	ready = rebase -i @{u}
+
+	# what's my last commit in this branch?
+	last = log --name-status HEAD^..HEAD
+
+	# undo the last commit
+	undo = reset --soft HEAD^
+
+	# pretty printed log
+	lg = log --pretty=format:'%Cred%h%Creset -%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
+	# what did i do in the last day?
+	standup = log --pretty=format:'%Cred%h%Creset -%Creset %s %Cgreen(%cD) %C(bold blue)<%an>%Creset' --since yesterday --author mike@clarkparsia.com
+
+	# better pull
+	purr = pull --rebase
+
+	# unstage file(s)
+	unstage = "!f() { git reset HEAD ${@:1}; }; f"
+
+	# redo, can only happen after undo afaik
+	redo = commit -c ORIG_HEAD
+
+	# drop changes to a file(s)
+	discard = "!f() { git checkout -- ${@:1}; }; f"
+
+	# create patches for all commits on the current branch that are not on develop
+	# effectively dump the history of your branch as patches
+	export = "!f () { git format-patch develop..`git rev-parse --abbrev-ref HEAD`; }; f"
+
+	# take the results of export and put them into a zip.  this zip can then be used with
+	# pkg-import to recreate the local changes of a branch in another checkout.
+	pkg-export = "!f () { zip patches.zip `find . -mmin 1 -type f -name '*.patch'` && find . -mmin 1 -type f -name '*.patch' -exec rm {} \\; ; }; f"
+
+	# import the results of export, takes a single parameter, the directory containing the patches
+	import = "!f() { find ${@:1} -type f -name '*.patch' -exec git am {} \\; ; }; f"
+
+	# import the results of pkg-export into the local branch, takes a single parameter the zip
+	# containing the patches that was exported via pkg-export
+	pkg-import = "!f() { unzip ${@:1} -d patches && git import patches && rm -rf patches; }; f"
+
+	# create a 'snapshot' if your working changes.  creates a stash to remove the changes
+	# but the re-applies them.  gives to a way to go back to the state of changes w/o committing them
+	snapshot = !git stash save "snapshot: $(date) - $*" && git stash apply "stash@{0}"
+	snapshots = stash list --grep snapshot
+
+	# print the log as a graph
+	graph = log --graph --pretty=oneline --abbrev-commit
+
+	# restore a deleted file
+	undelete = "!f() { git checkout HEAD^ ${@:1}; }; f"
+
+	# log w/ follow option to see the history of a single file
+	logf = "!f() { git log --follow -- ${@:1}; }; f"
+
+	tags = tag -l -n1
+
+	# grep with perl extensions and pretty print
+	g = grep --break --heading --line-number
+
+	# grep in certain file patterns
+	# example: git gfiles aVariable .java
+	gfiles ="!f() { git ls-files | grep $2 | sed s/[0-9]*:// | xargs git g $1 -- ; }; f"
+
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
 [core]
 	editor = vim
-[color]
-	ui = true
 [push]
 	default = simple
-[alias]
-	ci = commit
-	co = checkout
-	st = status
-	logg = log --graph
-	diffs = diff --stat
-	diffc = diff --cached
-	diffcs = diff --cached --stat
