@@ -7,6 +7,6 @@ My dotfiles collection
 To clone this repo:
 
 ```bash
-~ $ git clone git@github.com:edgarRd/.dotfiles.git dotfiles
+~ $ git clone git@github.com:edgarRd/dotfiles.git
 ```
 
