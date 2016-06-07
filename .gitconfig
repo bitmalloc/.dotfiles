@@ -1,18 +1,18 @@
 [user]
 	name = Edgar Rodriguez-Diaz
-    email = edgar@rodr.io
+	email = edgar@rodr.io
 [alias]
-    co = checkout
-    ci = commit
-    br = branch
-    cob = checkout -bj
-    cm = !git add -A && git commit -m
-    save = !git add -A && git commit -m 'SAVEPOINT'
-    wip = commit -am "WIP"
-    ec = config --global -e
-    st = status
-    undo = reset HEAD~1 --mixed
-    amend = commit -a --amend
+	co = checkout
+	ci = commit
+	br = branch
+	cob = checkout -bj
+	cm = !git add -A && git commit -m
+	save = !git add -A && git commit -m 'SAVEPOINT'
+	wip = commit -am "WIP"
+	ec = config --global -e
+	st = status
+	undo = reset HEAD~1 --mixed
+	amend = commit -a --amend
 	hist = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 	type = cat-file -t
 	dump = cat-file -p
